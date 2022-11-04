@@ -1,0 +1,51 @@
+node {
+     stage('Clone repository') {
+         checkout scm
+     }
+
+     stage('Build image') {
+         app = docker.build("290873317567.dkr.ecr.ap-northeast-2.amazonaws.com/test")
+     }
+
+     stage('Push image') {
+         sh 'rm  ~/.dockercfg || true'
+         sh 'rm ~/.docker/config.json || true'
+         
+         docker.withRegistry('https://290873317567.dkr.ecr.ap-northeast-2.amazonaws.com', 'ecr:ap-northeast-2:ECR') {
+             app.push("${env.BUILD_NUMBER}")
+             app.push("latest")
+          }
+     }
+     stage('SSH docker run was1a') {
+        script {
+            sshPublisher(
+                continueOnError: false, failOnError: true,
+                publishers: [
+                    sshPublisherDesc(
+                        configName: "was1a",
+                        verbose: true,
+                        transfers: [
+                            sshTransfer(execCommand: "./build.sh")
+                        ]
+                    )
+                ]
+            )
+        }
+    }
+    stage('SSH docker run was2c') {
+        script {
+            sshPublisher(
+                continueOnError: false, failOnError: true,
+                publishers: [
+                    sshPublisherDesc(
+                        configName: "was2c",
+                        verbose: true,
+                        transfers: [
+                            sshTransfer(execCommand: "./build.sh")
+                        ]
+                    )
+                ]
+            )
+        }
+    }
+}

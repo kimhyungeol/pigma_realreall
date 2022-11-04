@@ -1,0 +1,38 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light border-bottom">
+    <div class="container-fluid">
+          <!-- Logo 영역 -->
+    <a class="mb-2 navbar-brand" href="/"><img src="{% static 'pigmamusic.png' %}" width="70" height="50" alt=""> </a>
+
+        <a class="navbar-brand" href="{% url 'MTV:index' %}"><h1> PigmaMusic </h1></a> 
+        <button class="navbar-toggler" type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        </div>
+  
+
+       
+          <div class="text-end">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {% if user.is_anonymous %}
+            <a class="nav-link" href="{% url 'common:login' %}"><i class="fa-solid fa-user me-2"></i>로그인</a>
+            <a class="nav-link" href="{% url 'common:signup' %}"><i class="fa-solid fa-user me-2"></i>회원가입</a>
+            {% else %}
+            <a class="nav-link" href="{% url 'common:logout' %}"><i class="fa-solid fa-user me-2"></i>로그아웃 [ {{ user.username }} ]</a>
+          
+            {% endif %}
+              </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </nav>

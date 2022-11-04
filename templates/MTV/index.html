@@ -1,0 +1,112 @@
+{% extends "MTV/base.html" %}
+{% load static %}
+{% block content %}
+<div class="album py-5 bg-light">
+    <div class="container">
+     
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">     
+      {% for board in object_list %}
+        <div class="col">
+          <div class="card shadow-sm">
+            {% if user.is_anonymous %}
+            <a href="{{ board.get_absolute_url }}"  rel="noopener" class= "login_check" >
+              
+                <img  width="100%" height="225" class="Thumbnail" src="https://pigmamusic.s3.ap-northeast-2.amazonaws.com/{{ board.photo }}">
+              
+            </a>
+            {% else %}
+            <a href="{{ board.get_absolute_url }}"  target="_blank" rel="noopener" >
+              
+              <img  width="100%" height="225" class="Thumbnail" src="https://pigmamusic.s3.ap-northeast-2.amazonaws.com/{{ board.photo }}">
+            
+          </a>
+          {% endif %}
+            </div>
+            <div class="card-body">
+              <div>
+              <small class="text-muted "> {{ board.title }}</small>
+            </div>
+              <small class="text-muted "> 생성자 : {{ board.author }}</small>
+              <div class="description">
+                
+              </div>    
+              <div class=" align-items-center">
+                <div class="btn-group">
+                  {% if user.is_anonymous %}
+                  <button type="button" class=" login_check btn btn-sm btn-outline-secondary">
+                    게시글 보기</button>
+                    <small class="text-end">{{ board.modify_date }}</small>
+                    {% else %}
+                    <button type="button" class=" btn btn-sm btn-outline-secondary" onclick="window.location.href='{{ board.get_absolute_url }}'">
+                      게시글 보기</button>
+                <small class="text-end">{{ board.modify_date }}</small>
+                {% endif %}
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+</div>
+</div>
+
+
+    <!-- pagination 영역 -->
+
+
+
+    {% if page_obj.paginator.count >= page_obj.paginator.per_page %}
+
+    <ul class="pagination justify-content-center">
+      
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{page_obj.previous_page_number}}">이전</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link">이전</a>
+      </li>
+      {% endif %}
+
+    
+      {% for page_number in page_obj.paginator.page_range %}
+      {% if page_number >= page_obj.number|add:-3 and page_number <= page_obj.number|add:3 %}
+        {% if page_number == page_obj.number %}
+          <li class="page-item active">
+            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+          </li>
+        {% endif %}
+      {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link"  href="?page={{ page_obj.next_page_number }}">다음</a>
+      </li>
+      {% else %}
+      <li class="page-item disabled">
+        <a class="page-link">다음</a>
+      </li>
+      {% endif %}
+
+    </ul>
+    {% endif %}
+  </div>
+
+{% endblock %}
+
+{% block script %}
+<script type='text/javascript'>
+  $(document).ready(function() {
+    $(".login_check").on('click', function() {
+      alert("로그인 후 이용이 가능합니다.")
+    });
+  });
+</script>
+{% endblock %}

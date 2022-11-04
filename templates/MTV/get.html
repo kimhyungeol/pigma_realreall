@@ -1,0 +1,77 @@
+{% extends 'MTV/base_get.html' %}
+
+{% block content %}
+
+<section class="py-5 text-center container"></section>
+
+
+
+  <section class="board_detail-block">
+    <div class="container mt-3">
+    <div class="card border-dark mb-3">
+      <div class="card-header">
+        <h4 class="pt-1">{{ object.title }}</h4>
+        {% if object.modify_date %}
+        <p class="pt-1">Created by {{ object.author }} on {{ object.modify_date }}</p>
+        {% else %}
+        <p class="pt-1">Created by {{ object.author }} on {{ object.create_date }}</p>
+        {% endif %}
+      </div>
+
+
+      <div class="card-body text-dark">
+        <p class="card-text">{{ object.content | linebreaksbr }}</p>
+        <div class="image-box">
+
+        <span>
+          <audio class="sound mt-4" controls>
+              <source src="https://pigmamusic.s3.ap-northeast-2.amazonaws.com/{{ object.sound }}" type="audio/mp3">
+          </audio>
+        </span>
+      </div>
+        <div class="mt-4">
+
+        </div>
+      </div>
+      <div class="card-footer d-flex justify-content-between">
+        <a href="/" class="btn btn-outline-dark">목록</a>
+        
+        {% if user == object.author %}
+        <span>
+          <a href="#" class="btn btn-outline-dark">수정</a>
+          <a href="#" class="delete btn btn-outline-dark" data-uri="{% url 'MTV:delete' object.id %} " >삭제</a>
+        </span>
+        {% else %}
+        <span>
+          <a href="#" class="user_check btn btn-outline-dark">수정</a>
+          <a href="#" class="user_check btn btn-outline-dark">삭제</a>
+        </span>
+        {% endif %}
+      </div>
+        
+    </div>
+    {% include 'MTV/comment.html' %}
+    </div>
+    
+  </section>
+
+
+{% endblock %}
+
+{% block script %}
+<script type='text/javascript'>
+  $(document).ready(function() {
+    $(".delete").on('click', function() {
+      if(confirm("정말로 삭제하시겠습니까?")) {
+        location.href = $(this).data('uri');
+      }
+    });
+  });
+
+  $(document).ready(function() {
+    $(".user_check").on('click', function() {
+      alert("자신의 게시글만 수정 및 삭제가 가능합니다.")
+    });
+  });
+</script>
+{% endblock %}

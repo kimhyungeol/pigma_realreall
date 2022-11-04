@@ -1,0 +1,38 @@
+{% load static %}
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <img src="{% static 'pigmamusic.png' %}" class="img-fluid  col-12 ">
+        <span>
+        <h1 class="fw-light">Connect on PigmaMusic</h1>
+        <p class="lead text-muted">Discover, stream, and share a constantly expanding mix of music from emerging and major artists around the world.</p>
+        {% if user.is_anonymous %}
+        <p>
+          <a href="#" class="login_check btn btn-secondary my-2">클라우드에 업로드하기 !</a>
+        </p>
+        {% else %}
+          <p>
+            <a href="{% url 'MTV:upload' %}" class="btn btn-secondary my-2">클라우드에 업로드하기!</a>
+          </p>
+        </span>
+        {% endif %}
+
+      </div>
+      <div>
+      <form login_check class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" action="{% url 'MTV:result' %}" method='GET' >
+        {% csrf_token %}
+        
+        <input login_check type="search" class="form-control form-control-dark text-bg-dark" placeholder="게시글 검색하기..." name="query">
+        <input login_check type="submit" value="검색" >
+
+      </form>
+      {% block content %}
+      {% endblock %}
+
+    </div>
+    </div>
+  </section>
+
+
+
+  
